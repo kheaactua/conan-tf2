@@ -15,7 +15,7 @@ class Tf2Conan(ConanFile):
     generators = 'cmake'
     ros_install_file = 'indigo-tf2-wet.rosinstall'
     requires = (
-        'Boost/[>1.46]@conan/stable',
+        'boost/[>1.46]@lasote/stable',
         'console_bridge/indigo@ntc/stable',
         'gtest/[>=1.8.0]@lasote/stable'
     )
@@ -24,8 +24,8 @@ class Tf2Conan(ConanFile):
     }
 
     def configure(self):
-        self.options["Boost"].shared = self.options.shared
-        self.options["gtest"].shared = self.options.shared
+        self.options['boost'].shared = self.options.shared
+        self.options['gtest'].shared = self.options.shared
 
     def system_requirements(self):
         pkg_names = 'rosinstall-generator', 'rosdep', 'wstool', 'rosinstall', 'empy'
@@ -59,7 +59,7 @@ class Tf2Conan(ConanFile):
             console_bridge_cmake_path = os.path.join(self.deps_cpp_info['console_bridge'].rootpath, 'lib', 'console_bridge', 'cmake')
 
         args = []
-        args.append('-DBOOST_ROOT:PATH=%s'%self.deps_cpp_info['Boost'].rootpath)
+        args.append('-DBOOST_ROOT:PATH=%s'%self.deps_cpp_info['boost'].rootpath)
         args.append('-DBUILD_SHARED_LIBS=%s'%('TRUE' if self.options.shared else 'FALSE'))
         args.append(f'-DCMAKE_BUILD_TYPE:STRING={self.settings.build_type}')
         args.append('-DGTEST_ROOT:PATH=%s'%self.deps_cpp_info['gtest'].rootpath)
