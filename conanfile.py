@@ -32,6 +32,10 @@ class Tf2Conan(ConanFile):
         if pkg_names:
             self.run('pip install -U %s'%' '.join(pkg_names))
 
+    def build_requirements(self):
+        if 'Linux' == self.settings.os:
+            self.build_requires('pkg-config/0.29.2@ntc/stable')
+
     def source(self):
         cmd =f'rosinstall_generator tf2 --rosdistro "{self.version}" --deps --wet-only --tar > "{self.ros_install_file}"'
         try:
