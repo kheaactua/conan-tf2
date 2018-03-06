@@ -23,10 +23,6 @@ class Tf2Conan(ConanFile):
         'shared': [True, False],
     }
 
-    def configure(self):
-        self.options['boost'].shared = self.options.shared
-        self.options['gtest'].shared = self.options.shared
-
     def system_requirements(self):
         pkg_names = 'rosinstall-generator', 'rosdep', 'wstool', 'rosinstall', 'empy'
         if pkg_names:
