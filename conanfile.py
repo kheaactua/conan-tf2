@@ -66,6 +66,9 @@ class Tf2Conan(ConanFile):
         args.append(f'-Dconsole_bridge_DIR:PATH={console_bridge_cmake_path}')
         args.append('-DCONAN_CONSOLE_BRIDGE_ROOT:PATH=%s'%self.deps_cpp_info['console_bridge'].rootpath)
 
+        if self.settings.get_safe('arch').startswith('arm'):
+            args.append('-DRT_LIBRARY=%s'%os.path.join(os.environ['TOOLCHAIN_ROOT'], 'libc', 'usr', 'lib', 'librt.so'))
+
         cmd = 'src/catkin/bin/catkin_make_isolated --install %s'%(' '.join(args))
         self.output.info(f'Running: {cmd}')
         try:
