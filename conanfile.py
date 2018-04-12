@@ -18,7 +18,7 @@ class Tf2Conan(ConanFile):
         'boost/[>1.46]@ntc/stable',
         'console_bridge/indigo@ntc/stable',
         'gtest/[>=1.8.0]@bincrafters/stable',
-        'helpers/[>=0.2]@ntc/stable',
+        'helpers/0.2@ntc/stable',
     )
     options = {
         'shared': [True, False],
