@@ -75,7 +75,7 @@ class Tf2Conan(ConanFile):
 
         cmd = f'python {python_bin_path}/wstool init -j {ncors} src "{self.ros_install_file}"'
         try:
-            self.run(cmd, win_bash=win_bash)
+            self.run(cmd)
         except ConanException:
             self.output.error('wstool failed, restarting it.  cmd=%s'%cmd)
 
@@ -113,8 +113,6 @@ class Tf2Conan(ConanFile):
             )
 
     def build(self):
-        win_bash = 'Windows' == platform.system()
-
         if 'indigo' == self.deps_cpp_info['console_bridge'].version:
             console_bridge_cmake_path = os.path.join(self.deps_cpp_info['console_bridge'].rootpath, 'share', 'console_bridge', 'cmake')
         else:
