@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+# -*- coding: future_fstrings -*-
+# -*- coding: utf-8 -*-
+
 import sys, os, glob, platform
 from conans import ConanFile, tools, VisualStudioBuildEnvironment
 from conans.errors import ConanException
