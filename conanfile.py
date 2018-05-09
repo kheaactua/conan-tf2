@@ -13,7 +13,7 @@ class Tf2Conan(ConanFile):
     license = 'Creative Commons Attribution 3.0'
     url = 'http://wiki.ros.org/tf2'
     description = 'tf2 is the second generation of the transform library, which lets the user keep track of multiple coordinate frames over time.'
-    settings = 'os', 'compiler', 'build_type', 'arch'
+    settings = 'os', 'compiler', 'build_type', 'arch', 'arch_build'
     options = {'shared': [True, False]}
     default_options = 'shared=True'
     generators = 'cmake'
@@ -39,6 +39,11 @@ class Tf2Conan(ConanFile):
         self.build_requires('ninja_installer/1.8.2@bincrafters/stable')
         if 'Linux' == self.settings.os:
             self.build_requires('pkg-config/0.29.2@ntc/stable')
+
+        if self.settings.arch_build == 'x86':
+            self.build_requires('cmake_installer/[>3.2.0,<=3.6.3]@conan/stable')
+        else:
+            self.build_requires('cmake_installer/[>3.2.0]@conan/stable')
 
     def config_options(self):
         if self.settings.compiler == "Visual Studio":
