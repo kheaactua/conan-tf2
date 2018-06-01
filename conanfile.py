@@ -35,16 +35,6 @@ class Tf2Conan(ConanFile):
         if pkg_names:
             self.run('pip install -U %s'%' '.join(pkg_names))
 
-    def build_requirements(self):
-        self.build_requires('ninja_installer/1.8.2@bincrafters/stable')
-        if 'Linux' == self.settings.os:
-            self.build_requires('pkg-config/0.29.2@ntc/stable')
-
-        if self.settings.arch_build == 'x86':
-            self.build_requires('cmake_installer/[>3.2.0,<=3.6.3]@conan/stable')
-        else:
-            self.build_requires('cmake_installer/[>3.2.0]@conan/stable')
-
     def config_options(self):
         if self.settings.compiler == "Visual Studio":
             self.options.remove('fPIC')
