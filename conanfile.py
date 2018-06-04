@@ -48,13 +48,26 @@ class Tf2Conan(ConanFile):
             self.options['boost'].fPIC = self.options['boost'].shared
 
     def source(self):
+        if 'Windows' == self.settings.os:
+            python_bin = 'python'
+        else:
+            # On *nix, we shoudn't need to specify this
+            python_bin = ''
+        if len(python_bin):
+            python_bin += ' '
+
         if 'VIRTUAL_ENV' in os.environ:
             python_bin_path = os.path.join(os.environ['VIRTUAL_ENV'], 'Scripts' if 'Windows' == platform.system() else 'bin')
+        elif 'PYENV_VIRTUALENV_INIT' in os.environ:
+            # python_bin_path = os.path.join(os.environ['HOME'], '.pyenv', 'shims')
+            python_bin_path = ''
         else:
             self.output.warn('This script was written to be run in python\'s virtualenv, running outside of a virtualenv might result in difficulty locating the ROS python tools (such as rosinstall_generator')
             python_bin_path = '/usr/bin'
+        if len(python_bin_path):
+            python_bin_path += '/'
 
-        cmd =f'python {python_bin_path}/rosinstall_generator tf2 --rosdistro "{self.version}" --deps --wet-only --tar > "{self.ros_install_file}"'
+        cmd =f'{python_bin}{python_bin_path}rosinstall_generator tf2 --rosdistro "{self.version}" --deps --wet-only --tar > "{self.ros_install_file}"'
         try:
             self.run(cmd)
         except ConanException as e:
@@ -72,14 +85,14 @@ class Tf2Conan(ConanFile):
             # Seems to work better...
             ncors = 1
 
-        cmd = f'python {python_bin_path}/wstool init -j {ncors} src "{self.ros_install_file}"'
+        cmd = f'{python_bin}{python_bin_path}wstool init -j {ncors} src "{self.ros_install_file}"'
         try:
             self.run(cmd)
         except ConanException:
             self.output.error('wstool failed, restarting it.  cmd=%s'%cmd)
 
             try:
-                self.run(f'python {python_bin_path}/wstool update -j {ncors} -t src')
+                self.run(f'{python_bin}{python_bin_path}wstool update -j {ncors} -t src')
             except ConanException as e:
                 self.output.error('wstool failed: %s'%e)
                 sys.exit(-1)
@@ -125,9 +138,15 @@ class Tf2Conan(ConanFile):
         args.append(f'-Dconsole_bridge_DIR:PATH={console_bridge_cmake_path}')
         args.append('-DCONAN_CONSOLE_BRIDGE_ROOT:PATH=%s'%self.deps_cpp_info['console_bridge'].rootpath)
         args.append(f'-DCMAKE_INSTALL_PREFIX={self.package_folder}')
+
+        # Adding this to remove the --install-layout option on Tegra, got the
+        # suggestion from https://github.com/ros/catkin/issues/863
+        args.append('-DSETUPTOOLS_DEB_LAYOUT:BOOL=OFF')
+
+        # Require ninja.  It's good on Linux, and required on MSVC (this just won't build with MSVC)
         args.append('--use-ninja')
 
-        if self.settings.get_safe('arch').startswith('arm'):
+        if self.settings.get_safe('arch').startswith('arm') and 'TOOLCHAIN_ROOT' in os.environ:
             args.append('-DRT_LIBRARY=%s'%os.path.join(os.environ['TOOLCHAIN_ROOT'], 'libc', 'usr', 'lib', 'librt.so'))
 
         if self.settings.compiler == "Visual Studio":
