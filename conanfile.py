@@ -41,12 +41,6 @@ class Tf2Conan(ConanFile):
         if 'Windows' == platform.system():
             self.options.remove('shared')
 
-    def configure(self):
-        if 'shared' in self.options:
-            self.options['boost'].shared = self.options.shared
-        if self.settings.compiler != "Visual Studio":
-            self.options['boost'].fPIC = self.options['boost'].shared
-
     def source(self):
         if 'Windows' == self.settings.os:
             python_bin = 'python'
