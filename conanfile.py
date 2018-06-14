@@ -2,9 +2,11 @@
 # -*- coding: future_fstrings -*-
 # -*- coding: utf-8 -*-
 
-import sys, os, glob, platform
+import sys, os, glob, platform, re
+from io import StringIO # Python 2 and 3 compatible
 from conans import ConanFile, tools, VisualStudioBuildEnvironment
 from conans.errors import ConanException
+from conans.model.version import Version
 
 
 class Tf2Conan(ConanFile):
@@ -33,7 +35,23 @@ class Tf2Conan(ConanFile):
     def system_requirements(self):
         pkg_names = 'rosinstall-generator', 'rosdep', 'wstool', 'rosinstall', 'empy'
         if pkg_names:
-            self.run('pip install -U %s'%' '.join(pkg_names))
+            try:
+                self.run('pip install -U %s'%' '.join(pkg_names))
+            except ConanException:
+                self.output.warn('Could not run pip updates.  Ensure you have the following pip packages installed: %s'%', '.join(pkg_names))
+
+    def build_requirements(self):
+        try:
+            mybuf = StringIO()
+            self.run('ninja --version', output=mybuf)
+            outp = mybuf.getvalue()
+        except ConanException:
+            outp = ''
+
+        m = re.match(r'(?P<version>\d+\.\d+\.\d+)', outp)
+        if not m or Version(str(m.group('version'))) < '1.8.2':
+            self.output.info('Could not detect Ninja which is a build requirement for tf2 on Windows.  Adding ninja_installer@bincrafters')
+            self.build_requires('ninja_installer/1.8.2@bincrafters/stable')
 
     def config_options(self):
         if self.settings.compiler == "Visual Studio":
