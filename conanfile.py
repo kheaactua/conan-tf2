@@ -10,15 +10,15 @@ from conans.model.version import Version
 
 
 class Tf2Conan(ConanFile):
-    name = 'tf2'
-    version = 'indigo'
-    license = 'Creative Commons Attribution 3.0'
-    url = 'http://wiki.ros.org/tf2'
-    description = 'tf2 is the second generation of the transform library, which lets the user keep track of multiple coordinate frames over time.'
-    settings = 'os', 'compiler', 'build_type', 'arch', 'arch_build'
-    options = {'shared': [True, False]}
-    default_options = 'shared=True'
-    generators = 'cmake'
+    name             = 'tf2'
+    version          = 'indigo'
+    license          = 'Creative Commons Attribution 3.0'
+    url              = 'http://wiki.ros.org/tf2'
+    description      = 'tf2 is the second generation of the transform library, which lets the user keep track of multiple coordinate frames over time.'
+    settings         = 'os', 'compiler', 'build_type', 'arch', 'arch_build'
+    options          = {'shared': [True, False]}
+    default_options  = 'shared=True'
+    generators       = 'cmake'
     ros_install_file = 'indigo-tf2-wet.rosinstall'
     requires = (
         'boost/[>1.46]@ntc/stable',
