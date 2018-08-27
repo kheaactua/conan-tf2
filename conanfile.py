@@ -181,6 +181,9 @@ class Tf2Conan(ConanFile):
     def package(self):
         from platform_helpers import adjustPath
 
+        if 'Windows' == self.settings.os:
+            self.copy(pattern='*.pdb',  dst='bin', keep_path=False)
+
         # The pkg-config variables are full of absolute paths.
         p_files = glob.glob(os.path.join(self.package_folder, 'lib', 'pkgconfig', '*.pc'))
         for f in p_files:
