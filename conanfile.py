@@ -46,11 +46,12 @@ class Tf2Conan(ConanFile):
             self.run('ninja --version', output=mybuf)
             outp = mybuf.getvalue()
         except ConanException:
+            self.output.info('ninja not found in path')
             outp = ''
 
         m = re.match(r'(?P<version>\d+\.\d+\.\d+)', outp)
-        if not m or Version(str(m.group('version'))) < '1.8.2':
-            self.output.info('Could not detect Ninja which is a build requirement for tf2 on Windows.  Adding ninja_installer@bincrafters')
+        if not m or Version(str(m.group('version'))) < '1.7.2':
+            self.output.info('Could not detect Ninja which is a build requirement for tf2 on Windows.  Adding ninja_installer@bincrafters.  Detection buffer = "%s"'%outp.strip())
             self.build_requires('ninja_installer/1.8.2@bincrafters/stable')
 
     def config_options(self):
