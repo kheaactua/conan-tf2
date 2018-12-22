@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(tf2)
 
+include(conanbuildinfo.cmake)
+conan_basic_setup(TARGETS)
+
 find_package(Boost
   REQUIRED COMPONENTS 
     signals 
@@ -15,10 +18,13 @@ add_library(tf2
   src/buffer_core.cpp
   src/static_cache.cpp
 )
-target_include_directories(tf2 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(tf2 PUBLIC
+  ${CMAKE_CURRENT_SOURCE_DIR}/include
+  ${Boost_INCLUDE_DIRS}
+)
 target_link_libraries(tf2
+  CONAN_PKG::console_bridge
   ${Boost_LIBRARIES}
-  ${console_bridge_LIBRARIES}
 )
 
 install(TARGETS tf2
