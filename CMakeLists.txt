@@ -37,6 +37,7 @@ install(DIRECTORY
     ${CMAKE_CURRENT_SOURCE_DIR}/include/std_msgs
     ${CMAKE_CURRENT_SOURCE_DIR}/include/geometry_msgs
     ${CMAKE_CURRENT_SOURCE_DIR}/include/tf2_msgs
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/tf2
   DESTINATION include
 )
 
