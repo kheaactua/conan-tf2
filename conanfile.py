@@ -17,7 +17,7 @@ class Tf2Conan(ConanFile):
     generators       = 'cmake'
     requires = (
         'boost/[>1.60]@conan/stable',
-        'console_bridge/master@ntc/stable', # TODO put a version number on this
+        'console_bridge/0.4.2@ntc/stable',
         'helpers/0.3@ntc/stable',
     )
     options = {
@@ -28,7 +28,9 @@ class Tf2Conan(ConanFile):
 
     def config_options(self):
         if 'Visual Studio' == self.settings.compiler:
-            # When shared, VS trips over a bunch of undeclared symbols
+            # When shared, VS trips over a bunch of undeclared symbols. (Not
+            # yet tested with Melodic, this is what happened with indigo
+            # though)
             self.options.remove('shared')
 
     def _setup_cmake(self):
