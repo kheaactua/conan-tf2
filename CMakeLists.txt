@@ -14,9 +14,15 @@ find_package(Boost
 find_package(console_bridge)
 
 add_library(tf2
+  # geometry2
   src/cache.cpp
   src/buffer_core.cpp
   src/static_cache.cpp
+
+  # roscpp_core
+  src/time.cpp
+  src/rate.cpp
+  src/duration.cpp
 )
 target_include_directories(tf2 PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}/include
