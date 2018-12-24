@@ -27,13 +27,6 @@ class Tf2Conan(ConanFile):
     default_options = ('shared=True')
     exports_sources = 'include*', 'src*', 'CMakeLists.txt', 'patches*'
 
-    def config_options(self):
-        if 'Visual Studio' == self.settings.compiler:
-            # When shared, VS trips over a bunch of undeclared symbols. (Not
-            # yet tested with Melodic, this is what happened with indigo
-            # though)
-            self.options.remove('shared')
-
     def source(self):
         # Suppress the NO_ERROR conflict, as it appears that ROS doesn't want
         # to https://github.com/ros/geometry2/issues/172
