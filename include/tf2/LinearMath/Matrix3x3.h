@@ -16,6 +16,9 @@ subject to the following restrictions:
 #ifndef	TF2_MATRIX3x3_H
 #define TF2_MATRIX3x3_H
 
+// Include ROS_DEPRECATED (Matt Dec/2018)
+#include "ros/macros.h"
+
 #include "Vector3.h"
 #include "Quaternion.h"
 
@@ -163,7 +166,7 @@ public:
 	*  @param pitch Pitch about Y axis
 	*  @param roll Roll about X axis 
 	*/
-	void setEulerZYX(const tf2Scalar& yaw, const tf2Scalar& pitch, const tf2Scalar& roll) __attribute__((deprecated))
+	void setEulerZYX(const tf2Scalar& yaw, const tf2Scalar& pitch, const tf2Scalar& roll) ROS_DEPRECATED
 	{
 		setEulerYPR(yaw, pitch, roll);
 	}
@@ -279,7 +282,7 @@ public:
 	* @param pitch Pitch around Y axis
 	* @param roll around X axis 
  	* @param solution_number Which solution of two possible solutions ( 1 or 2) are possible values*/	
-	__attribute__((deprecated)) void getEulerZYX(tf2Scalar& yaw, tf2Scalar& pitch, tf2Scalar& roll, unsigned int solution_number = 1) const
+	ROS_DEPRECATED void getEulerZYX(tf2Scalar& yaw, tf2Scalar& pitch, tf2Scalar& roll, unsigned int solution_number = 1) const
 	{
 		getEulerYPR(yaw, pitch, roll, solution_number);
 	};
