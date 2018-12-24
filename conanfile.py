@@ -3,6 +3,7 @@
 
 import os
 from conans import ConanFile, CMake, tools
+from conans.model.version import Version
 
 
 class Tf2Conan(ConanFile):
@@ -24,7 +25,7 @@ class Tf2Conan(ConanFile):
         'shared': [True, False],
     }
     default_options = ('shared=True')
-    exports_sources = 'include*', 'src*', 'CMakeLists.txt'
+    exports_sources = 'include*', 'src*', 'CMakeLists.txt', 'patches*'
 
     def config_options(self):
         if 'Visual Studio' == self.settings.compiler:
@@ -32,6 +33,19 @@ class Tf2Conan(ConanFile):
             # yet tested with Melodic, this is what happened with indigo
             # though)
             self.options.remove('shared')
+
+    def source(self):
+        # Suppress the NO_ERROR conflict, as it appears that ROS doesn't want
+        # to https://github.com/ros/geometry2/issues/172
+        if 'Visual Studio' == self.settings.compiler:
+            if Version(str(self.settings.compiler.version)) < '14':
+                tools.replace_in_file(
+                    file_path=os.path.join('include', 'tf2_msgs', 'TF2Error.h'),
+                    search='  enum',
+                    replace='#undef NO_ERROR\n  enum'
+                )
+            else:
+                tools.patch(patch_file='patches/suppress_NO_ERROR.patch')
 
     def _setup_cmake(self):
         cmake = CMake(self)
