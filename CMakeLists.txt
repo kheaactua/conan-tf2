@@ -26,6 +26,11 @@ target_link_libraries(tf2
   CONAN_PKG::console_bridge
   ${Boost_LIBRARIES}
 )
+target_compile_features(tf2 PUBLIC cxx_override)
+set_target_properties(tf2 PROPERTIES
+  CXX_STANDARD 11
+  CXX_STANDARD_REQUIRED YES
+)
 
 install(TARGETS tf2
   ARCHIVE DESTINATION lib
