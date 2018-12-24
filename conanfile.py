@@ -16,7 +16,7 @@ class Tf2Conan(ConanFile):
     default_options  = 'shared=True'
     generators       = 'cmake'
     requires = (
-        'boost/[>1.60,<1.69]@conan/stable',
+        'boost/[>=1.60,<1.69]@conan/stable',
         'console_bridge/0.4.2@ntc/stable',
         'helpers/0.3@ntc/stable',
     )
