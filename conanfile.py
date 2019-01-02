@@ -27,6 +27,15 @@ class Tf2Conan(ConanFile):
     default_options = ('shared=True')
     exports_sources = 'include*', 'src*', 'CMakeLists.txt', 'patches*'
 
+    def config_options(self):
+        if 'Visual Studio' == self.settings.compiler:
+            # When shared, VS trips over a bunch of undeclared symbols.  This
+            # is because that despite rostime_decl.h defining a ROSTIME_DELC to
+            # defined the proper import/export macros defined in macros.h, the
+            # macros aren't actually well distributed (e.g. buffer_core.h,
+            # geometry_msgs, etc.)  This is still true for melodic.
+            self.options.remove('shared')
+
     def source(self):
         # Suppress the NO_ERROR conflict, as it appears that ROS doesn't want
         # to https://github.com/ros/geometry2/issues/172
