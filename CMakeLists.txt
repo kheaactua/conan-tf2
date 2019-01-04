@@ -40,7 +40,7 @@ set_target_properties(tf2 PROPERTIES
 if(BUILD_SHARED_LIBS)
   # Though not really used in the code in this project, this is ROS's custom
   # define used when building shared libs.
-  target_compile_definitions(-DROS_BUILD_SHARED_LIBS)
+  target_compile_definitions(tf2 PUBLIC -DROS_BUILD_SHARED_LIBS)
 endif()
 
 if(WIN32)
