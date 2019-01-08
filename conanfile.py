@@ -21,7 +21,7 @@ class Tf2Conan(ConanFile):
     generators       = 'cmake'
     ros_install_file = 'indigo-tf2-wet.rosinstall'
     requires = (
-        'boost/[>1.46]@ntc/stable',
+        'boost/[>1.46,<=1.60]@ntc/stable',
         'console_bridge/indigo@ntc/stable',
         'gtest/[>=1.8.0]@bincrafters/stable',
         'helpers/0.2@ntc/stable',
